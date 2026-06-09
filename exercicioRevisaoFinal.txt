@@ -1,0 +1,50 @@
+-- 1 1.	Cadastrar 5 mesas, 10 produtos, 
+--5 garçons, 10 atendimentos e 15 produtos consumidos nesses atendimentos (com dados diferentes).
+
+
+--cria bd
+CREATE DATABASE restaurante
+
+USE restaurante 
+
+--criar tabela 
+CREATE TABLE mesa(
+	nroMesa int PRIMARY KEY IDENTITY (1,1),  --chave primaria
+	setor int,
+	capacidade int,
+	situacao varchar(15)
+	)
+
+
+CREATE TABLE produto(
+	codPro int PRIMARY KEY IDENTITY (1,1),
+	descricao varchar(100),
+	preco money
+	)
+
+
+
+CREATE TABLE garcon(
+	codGarcon int PRIMARY KEY IDENTITY(1,1),
+	nome varchar(80),
+	calcularComissao money
+	)
+
+
+CREATE TABLE atendimento(
+	codAtendimento int PRIMARY KEY,
+	situacao char(1),
+	dtHrChegada timestamp,
+	nroPessoas int
+	)
+
+
+
+
+
+
+INSERT INTO mesa (setor, capacidade,situacao)
+VALUES (42, 2, 4, ''),
+       (12, 2, 2, 'b'),
+	   (42, 2, 4, 'c')
+
