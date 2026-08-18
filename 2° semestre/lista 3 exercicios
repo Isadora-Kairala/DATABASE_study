@@ -1,0 +1,192 @@
+
+
+/*(1,n) => fk vai pra tabela do lado N referenciando a pk do lado 1
+relacionamento vira uma coluna
+
+
+ent em reserva : codHospede referencia hospede 
+e codQuarto referencia quarto
+*/
+
+/*
+(N,N) = >  cria tabela que carrega as fks das 
+duas entidades a pk é a combinação das duasfks
+ou novo id proprio
+*/
+
+/*
+(1,1) =>  Fusão, toda ocorrencia de uma 
+entidade corresponde a exatamente uma ocorrencia 
+da outra, ex: hospede tem 1 passaporte e cada 
+passaporte pertence a exatamente 1 hospede
+(1,1) dos dois lados
+"nunca existe um  hospede sem passaporte e nenhum
+passporte sem hospede" por isso nao compensa 
+manter duas tab separadas
+*/
+
+
+--1)
+
+CREATE DATABASE hotel
+
+
+--fusao, fk, e etc cardinalidade
+--hospede, quarto , reserva. dps tanto faz pagamento ou refeição
+
+USE hotel
+
+CREATE TABLE hospedes(
+    codHospede int PRIMARY KEY IDENTITY(1,1),
+    nome vachar(80),
+    idade int,
+    sexo char(1)
+)
+
+
+CREATE TABLE quarto(
+    codQuarto int PRIMARY KEY IDENTITY(1,1), 
+    tipo varchar(100),
+    numeracao int,
+    andar int
+)
+
+
+
+
+CREATE TABLE reserva(
+    codReserva int PRIMARY KEY IDENTITY(1,1),
+    dtEntrada date,
+    dtSaida date,
+    codHospede int FOREIGN KEY REFERENCES hospede(codHospede) NOT NULL,
+    codQuarto int FOREIGN KEY REFERENCES quarto(codQuarto) NOT NULL
+)
+
+
+
+CREATE TABLE pagamento(
+    codPagto int PRIMARY KEY IDENTITY(1,1),
+    valor money,
+    dtPagto date,
+    codReserva int  FOREIGN KEY REFERENCES reserva(codReserva) NOT NULL
+)
+
+
+CREATE TABLE refeicao(
+    codConsumo int PRIMARY KEY IDENTITY(1,1),
+    descRefeicao varchar(200),
+    valor money,
+    codReserva int FOREIGN KEY REFERENCES reserva(codReserva) NOT NULL
+)
+
+INSERT INTO refeicao
+VALUES ("file cantone", 25.90, 5 ),
+       ("frango xadrez", 30.99, 1),
+       ("Abobora assada". 33.30, 2),
+       ("Arroz colorido", 20.99, 6),
+       ("Beringela", 44.45,3),
+       ("fango agridoce, 46.98, 7)
+--2)
+
+
+
+INSERT INTO quarto
+VALUES ("suite", 503, 3),
+       ("solteiro", 204, 2),
+       ("Superior Master", 233, 4),
+       ("familia", 590, 2),
+       ("Superior Master", 345, 3)
+
+
+INSERT INTO hospedes
+
+VALUES ("MARIANA", 22, "F"),
+
+       ("JOAO", 23, "M"),
+
+       ("MAria", 33, "F"),
+
+       ("Joana", 34, "F"),
+
+       ("Maricota", 44, "F"),
+
+       ("josivalda", 45, "F"),
+
+       ("Marco", 55, "M"),
+
+       ("José", 90, "M")
+
+--ano mes e dia
+INSERT INTO reserva
+VALUES ("2026-08-18", "2026-08-20, 1, 2),
+       ("2026-07-27", "2026-08-27", 5,6),
+       ("2026-05-02", "2026-05-06", 4,4),
+       ("2026-06-27", "2026-06-30", 5, 5)
+
+
+INSERT INTO refeicao
+VALUES ("file cantone", 25.90, 5 ),
+       ("frango xadrez", 30.99, 1),
+       ("Abobora assada". 33.30, 2),
+       ("Arroz colorido", 20.99, 6),
+       ("Beringela", 44.45,3),
+       ("fango agridoce, 46.98, 7)
+
+--3)
+
+SELECT COUNT(tipo)
+FROM quarto
+WHERE tipo = 'Superior Master';
+
+--4)
+
+SELECT 
+    AVG(valor)
+FROM refeicao
+
+
+--5) hospede idade criar campo pra data de nasc ent drop e alteer 
+
+ALTER TABLE hospede
+DROP COLUMN idade;
+
+ALTER TABLE 
+ADD COLUMN dtNasci date;
+
+--6)
+
+SELECT 
+    COUNT(DISTINCT codHospede)
+FROM hospedes 
+
+
+--7) JOIN AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+SELECT h.nome, 
+       r.dtEntrada 
+FROM hospede h 
+JOIN reserva r 
+ON h.codHospede = r.codHospede
+
+--8)
+
+UPDATE hospede
+SET dtNasci =
+    CASE codHospede
+        WHEN 1 THEN '2006-06-27'
+        WHEN 2 THEN '2007-06-27'
+        WHEN 3 THEN '2004-05-18'
+        WHEN 4 THEN '2001-06-28'
+        WHEN 5 THEN '2012-07-26'
+        WHEN 6 THEN '2007-09-12'
+        WHEN 7 THEN '1989-05-05'
+        WHEN 8 THEN '2006-07-27'
+    END
+WHERE codHospede IN (1,2,3,4,5,6,7,8);
+
+
+--9)
+
+
+
+
